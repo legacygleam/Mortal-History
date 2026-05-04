@@ -4,6 +4,7 @@ export async function compressImage(file) {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
+      URL.revokeObjectURL(img.src);
       const canvas = document.createElement('canvas');
       let { width, height } = img;
       if (width > 1200) { height = (height * 1200) / width; width = 1200; }
@@ -19,7 +20,7 @@ export async function compressImage(file) {
         }
       }, `image/${IMAGE_FORMAT}`, 0.8);
     };
-    img.onerror = reject;
+    img.onerror = () => { URL.revokeObjectURL(img.src); reject(new Error('Failed to load image')); };
     img.src = URL.createObjectURL(file);
   });
 }

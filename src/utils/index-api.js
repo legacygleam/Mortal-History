@@ -45,5 +45,17 @@ async function fallbackRecent() {
     }),
   });
   const result = await response.json();
-  return (result.data?.transactions?.edges || []).map(e => e.node);
+  return (result.data?.transactions?.edges || []).map(e => {
+    const tags = {};
+    for (const tag of (e.node.tags || [])) {
+      tags[tag.name] = tag.value;
+    }
+    return {
+      id: e.node.id,
+      title: tags['Title'] || null,
+      language: tags['Language'] || 'zh',
+      timestamp: e.node.block?.timestamp || null,
+      ...tags,
+    };
+  });
 }

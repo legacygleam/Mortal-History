@@ -13,6 +13,8 @@ async function publishArchive(archiveDir, walletPath) {
 
   console.log(`Publishing archive for address: ${address}`);
 
+  const uploads = [];
+
   function walkDir(dir, relativeDir = '') {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
     for (const entry of entries) {
@@ -27,12 +29,13 @@ async function publishArchive(archiveDir, walletPath) {
           content = fm + content;
         }
         console.log(`Uploading: ${relPath}`);
-        uploader.uploadMarkdown(content, relPath);
+        uploads.push(uploader.uploadMarkdown(content, relPath));
       }
     }
   }
 
   walkDir(archiveDir);
+  await Promise.all(uploads);
   console.log('Upload complete:', uploader.getUploadedIds());
 }
 

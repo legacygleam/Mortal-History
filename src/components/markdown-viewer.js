@@ -13,7 +13,8 @@ export class MarkdownViewer extends HTMLElement {
 
   render() {
     if (!this._content) return;
-    const html = marked.parse(this._content, { breaks: true });
+    const raw = marked.parse(this._content, { breaks: true });
+    const html = sanitizeHtml(raw);
     this.shadowRoot.innerHTML = `
       <style>
         :host { display: block; line-height: 1.8; }
@@ -31,6 +32,19 @@ export class MarkdownViewer extends HTMLElement {
       <div class="markdown-body">${html}</div>
     `;
   }
+}
+
+function sanitizeHtml(str) {
+  return str
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+    .replace(/<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi, '')
+    .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
+    .replace(/on\w+\s*=\s*"[^"]*"/gi, '')
+    .replace(/on\w+\s*=\s*'[^']*'/gi, '')
+    .replace(/href\s*=\s*"javascript:[^"]*"/gi, 'href="#"')
+    .replace(/href\s*=\s*'javascript:[^']*'/gi, "href='#'");
+}
 }
 
 customElements.define('md-viewer', MarkdownViewer);
