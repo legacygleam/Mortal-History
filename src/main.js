@@ -27,6 +27,11 @@ function router() {
     return;
   }
 
+  if (path.startsWith('/search')) {
+    import('./pages/search.js').then(m => m.SearchPage({}, main));
+    return;
+  }
+
   const Page = routes[path] || HomePage;
   Page({}, main);
 }
