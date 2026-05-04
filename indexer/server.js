@@ -24,8 +24,12 @@ app.get('/recent', (req, res) => {
 
 app.get('/search', (req, res) => {
   const query = req.query.q;
-  if (!query) return res.status(400).json({ error: 'Query parameter required' });
-  const results = searchProfiles(query);
+  if (!query || typeof query !== 'string' || !query.trim()) {
+    return res.status(400).json({ error: 'Query parameter required' });
+  }
+  // Limit query length to prevent abuse
+  const safeQuery = query.trim().slice(0, 100);
+  const results = searchProfiles(safeQuery);
   res.json(results);
 });
 

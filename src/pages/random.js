@@ -1,4 +1,5 @@
 import { fetchRandom } from '../utils/index-api.js';
+import { escapeHtml } from '../utils/escape.js';
 
 export async function RandomPage(params, container) {
   container.innerHTML = `
@@ -27,21 +28,29 @@ export async function RandomPage(params, container) {
       return;
     }
 
-    const txId = profile.tx_id || profile.id;
+    const txId = encodeURIComponent(profile.tx_id || profile.id);
+    const nickname = escapeHtml(profile.nickname || '?');
+    const initial = (profile.nickname || '?')[0];
+    const realName = escapeHtml(profile.real_name);
+    const bio = escapeHtml(profile.bio);
+    const birthYear = profile.birth_year || '?';
+    const deathYear = profile.death_year || '至今';
+    const nationality = escapeHtml(profile.nationality || '');
+
     container.innerHTML = `
       <section class="random-section">
         <h1>遇见一个人</h1>
         <p class="hero-subtitle">随机探索一段被永久保存的人生</p>
         <div class="random-result">
           <a href="/profile/${txId}" class="card card-large" data-nav>
-            <div class="card-avatar">${(profile.nickname || '?')[0]}</div>
-            <h2>${profile.nickname || '未知'}</h2>
-            ${profile.real_name ? `<p class="card-realname">${profile.real_name}</p>` : ''}
+            <div class="card-avatar">${escapeHtml(initial)}</div>
+            <h2>${nickname}</h2>
+            ${realName ? `<p class="card-realname">${realName}</p>` : ''}
             <p class="card-meta">
-              ${profile.birth_year || '?'} — ${profile.death_year || '至今'}
-              ${profile.nationality ? ` · ${profile.nationality}` : ''}
+              ${escapeHtml(birthYear)} — ${escapeHtml(deathYear)}
+              ${nationality ? ` · ${nationality}` : ''}
             </p>
-            ${profile.bio ? `<p class="card-desc">${profile.bio}</p>` : ''}
+            ${bio ? `<p class="card-desc">${bio}</p>` : ''}
             <span class="btn btn-primary">阅读TA的故事</span>
           </a>
           <button id="random-again" class="btn btn-secondary">换一个人</button>

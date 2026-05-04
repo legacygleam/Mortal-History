@@ -35,16 +35,22 @@ export class MarkdownViewer extends HTMLElement {
 }
 
 function sanitizeHtml(str) {
+  // Strip all HTML tags except safe ones
+  const safeTags = ['h1','h2','h3','h4','h5','h6','p','br','ul','ol','li',
+    'blockquote','pre','code','em','strong','del','hr','table','thead','tbody',
+    'tr','th','td','img','a','div','span','section'];
   return str
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
     .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
     .replace(/<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi, '')
     .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
-    .replace(/on\w+\s*=\s*"[^"]*"/gi, '')
-    .replace(/on\w+\s*=\s*'[^']*'/gi, '')
-    .replace(/href\s*=\s*"javascript:[^"]*"/gi, 'href="#"')
-    .replace(/href\s*=\s*'javascript:[^']*'/gi, "href='#'");
-}
+    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
+    .replace(/<[^>]*on\w+\s*=[^>]*>/gi, '')       // Remove any tag with event handler (no quotes needed)
+    .replace(/href\s*=\s*(?:"|')?\s*javascript\s*:/gi, 'href="#"')  // Catch both quoted and unquoted
+    // Strip any tags not in the safe list
+    .replace(/<\/?(\w+)[^>]*>/g, (match, tag) => {
+      return safeTags.includes(tag.toLowerCase()) ? match : '';
+    });
 }
 
 customElements.define('md-viewer', MarkdownViewer);

@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(npm install *)",
+      "Bash(npx vitest *)",
+      "Bash(git *)",
+      "Bash(chmod +x /Users/ruyi/Documents/个人历史/cli/publish.js /Users/ruyi/Documents/个人历史/cli/export.js)",
+      "Bash(npx vite *)",
+      "Bash(chmod +x *)",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(node server.js)",
+      "Bash(curl -s http://localhost:3001/random)",
+      "Bash(cat)",
+      "Bash(mkdir -p /tmp/sample-archive/传记 /tmp/sample-archive/assets)",
+      "Bash(node -e ' *)",
+      "Bash(curl -s http://localhost:3001/recent)",
+      "Bash(python3 -m json.tool)",
+      "Bash(curl -s http://localhost:3001/recent echo \"\" echo \"=== /random ===\")",
+      "Bash(curl -s http://localhost:3001/random echo \"\" echo \"=== /search?q=山月 ===\")",
+      "Bash(curl -s \"http://localhost:3001/search?q=山月\")",
+      "Bash(curl *)",
+      "Bash(open *)",
+      "Bash(gh auth *)"
+    ]
+  }
+}

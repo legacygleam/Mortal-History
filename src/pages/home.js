@@ -1,4 +1,5 @@
 import { fetchRecent } from '../utils/index-api.js';
+import { escapeHtml } from '../utils/escape.js';
 
 export async function HomePage(params, container) {
   container.innerHTML = `
@@ -36,12 +37,17 @@ export async function HomePage(params, container) {
       recentList.innerHTML = '<p class="empty-state">还没有人留下档案，来做第一个吧</p>';
       return;
     }
-    recentList.innerHTML = items.map(item => `
-      <a href="/profile/${item.id}" class="card" data-nav>
-        <h3>${item.title || '未知档案'}</h3>
-        <p class="card-meta">${item.language || 'zh'} · ${new Date(item.timestamp || Date.now()).toLocaleDateString()}</p>
-      </a>
-    `).join('');
+    recentList.innerHTML = items.map(item => {
+      const title = escapeHtml(item.title || '未知档案');
+      const lang = escapeHtml(item.language || 'zh');
+      const ts = item.timestamp ? new Date(item.timestamp).toLocaleDateString() : new Date().toLocaleDateString();
+      return `
+        <a href="/profile/${encodeURIComponent(item.id || item.tx_id)}" class="card" data-nav>
+          <h3>${title}</h3>
+          <p class="card-meta">${lang} · ${ts}</p>
+        </a>
+      `;
+    }).join('');
   } catch {
     recentList.innerHTML = '<p class="empty-state">暂时无法加载最新收录</p>';
   }
