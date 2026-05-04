@@ -114,3 +114,17 @@ export function getRandomProfile() {
   `);
   return stmt.get();
 }
+
+export function getProfileById(txId) {
+  const stmt = getDB().prepare(`
+    SELECT * FROM profiles WHERE tx_id = ?
+  `);
+  return stmt.get(txId);
+}
+
+export function getContentsByParentTxId(parentTxId) {
+  const stmt = getDB().prepare(`
+    SELECT * FROM contents WHERE parent_tx_id = ? AND moderated = 0 ORDER BY indexed_at ASC
+  `);
+  return stmt.all(parentTxId);
+}

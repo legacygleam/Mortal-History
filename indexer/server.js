@@ -1,5 +1,5 @@
 import express from 'express';
-import { initDB, getRecentProfiles, searchProfiles, getRandomProfile, insertProfile, insertContent } from './db.js';
+import { initDB, getRecentProfiles, searchProfiles, getRandomProfile, getProfileById, getContentsByParentTxId, insertProfile, insertContent } from './db.js';
 import { crawlNewProfiles, fetchProfileContent } from './crawler.js';
 import { autoModerate, reportContent } from './moderation.js';
 
@@ -37,6 +37,13 @@ app.get('/random', (req, res) => {
   const profile = getRandomProfile();
   if (!profile) return res.json(null);
   res.json(profile);
+});
+
+app.get('/profile/:txId', (req, res) => {
+  const profile = getProfileById(req.params.txId);
+  if (!profile) return res.status(404).json({ error: 'Profile not found' });
+  const contents = getContentsByParentTxId(req.params.txId);
+  res.json({ profile, contents });
 });
 
 app.post('/report', (req, res) => {

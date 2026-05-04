@@ -32,6 +32,16 @@ export async function fetchRandom() {
   }
 }
 
+export async function fetchProfileById(txId) {
+  try {
+    const response = await fetch(`${INDEX_API}/profile/${encodeURIComponent(txId)}`);
+    if (!response.ok) throw new Error('Profile not found in index');
+    return await response.json();
+  } catch {
+    return null;
+  }
+}
+
 async function fallbackRecent() {
   const response = await fetch('https://arweave.net/graphql', {
     method: 'POST',

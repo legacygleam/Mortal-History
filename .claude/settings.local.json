@@ -24,7 +24,9 @@
       "Bash(curl -s \"http://localhost:3001/search?q=山月\")",
       "Bash(curl *)",
       "Bash(open *)",
-      "Bash(gh auth *)"
+      "Bash(gh auth *)",
+      "Bash(pkill -f \"vite\")",
+      "Bash(pkill -f \"node server.js\")"
     ]
   }
 }
