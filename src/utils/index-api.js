@@ -1,4 +1,6 @@
-const INDEX_API = 'https://api.eternallife.app';
+const INDEX_API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3001'
+  : 'https://api.eternallife.app';
 
 export async function fetchRecent(max = 20) {
   try {
