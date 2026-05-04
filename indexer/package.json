@@ -1,0 +1,9 @@
+{
+  "name": "eternal-life-indexer",
+  "version": "0.1.0",
+  "type": "module",
+  "dependencies": {
+    "express": "^4.21.0",
+    "better-sqlite3": "^11.0.0"
+  }
+}
